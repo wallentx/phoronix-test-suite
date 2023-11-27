@@ -61,10 +61,10 @@ class phodevi_base
 
 		if(pts_strings::has_element_in_string($hw, array('Ampere ', 'Amazon EC2', 'Google Compute')))
 		{
-			// Dp this check first so ARM servers won't be classified as embedded E
+			// Do this check first so ARM servers won't be classified as embedded E
 			$type = 'S';
 		}
-		else if(pts_strings::has_element_in_string($hw, array('ARMv', 'Cortex', 'Exynos', 'jetson')) || stripos($sw, 'mips64') !== false)
+		else if(pts_strings::has_element_in_string($hw, array('ARMv', 'Cortex', 'Exynos', 'jetson')) || ($sw !== null && stripos($sw, 'mips64') !== false))
 		{
 			$type = 'E';
 		}
@@ -76,11 +76,12 @@ class phodevi_base
 		{
 			$type = 'M';
 		}
-		else if(strpos($sw, 'System Layer') !== false || stripos($sw, 'amazon') !== false || stripos($sw, 'xen') !== false || stripos($sw, 'qemu') !== false)
+		else if($sw !== null && (strpos($sw, 'System Layer') !== false || stripos($sw, 'amazon') !== false || stripos($sw, 'xen') !== false || stripos($sw, 'qemu') !== false))
 		{
+			// Ensure $sw is not null before using it in string functions
 			$type = 'V';
 		}
-		else if(pts_strings::has_element_in_string($hw, array('Quadro ', 'Tesla ', 'FirePro', 'Radeon Pro')) || (pts_strings::has_element_in_string($hw, array(' Xeon', 'Opteron', 'EPYC')) && strpos($sw, 'Desktop') && strpos($sw, 'OpenGL')))
+		else if(pts_strings::has_element_in_string($hw, array('Quadro ', 'Tesla ', 'FirePro', 'Radeon Pro')) || (pts_strings::has_element_in_string($hw, array(' Xeon', 'Opteron', 'EPYC')) && $sw !== null && strpos($sw, 'Desktop') && strpos($sw, 'OpenGL')))
 		{
 			$type = 'W';
 		}
