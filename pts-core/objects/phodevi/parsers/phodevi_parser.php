@@ -31,8 +31,9 @@ class phodevi_parser
 		if(pts_client::executable_in_path('nvidia-settings'))
 		{
 			$info = shell_exec('nvidia-settings --query ' . $attribute . ' 2> /dev/null');
+			$lastInString = pts_strings::last_in_string($attribute, '/');
 
-			if(($pos = strpos($info, pts_strings::last_in_string($attribute, '/'))) > 0 && strpos($info, 'ERROR:') === false)
+			if ($info !== null && $lastInString !== null && ($pos = strpos($info, $lastInString)) > 0 && strpos($info, 'ERROR:') === false)
 			{
 				$nv_info = substr($info, strpos($info, '):') + 3);
 				$nv_info = trim(substr($nv_info, 0, strpos($nv_info, "\n")));
